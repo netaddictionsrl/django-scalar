@@ -1,9 +1,10 @@
 [project]
 name = "django-scalar"
-version = "0.2.0"
+version = "0.3.0"
 description = "Publish your Django API docs with Scalar"
 readme = "README.md"
 authors = [
+    { name = "Netaddiction", email = "dev@netaddiction.it" },
 ]
 classifiers = [
     "Environment :: Web Environment",
@@ -28,14 +29,30 @@ classifiers = [
 license = { text = "MIT" }
 requires-python = ">=3.10"
 dependencies = [
+    "Django >= 4.2",
+]
+
+[project.optional-dependencies]
+spectacular = [
+    "drf-spectacular >= 0.28.0",
+    "djangorestframework >= 3.15.0",
+]
+filters = [
+    "django-filter >= 24",
+    "drf-spectacular >= 0.28.0",
+    "djangorestframework >= 3.15.0",
+]
+all = [
     "drf-spectacular >= 0.28.0",
     "django-filter >= 24",
     "djangorestframework >= 3.15.0",
 ]
 
 [project.urls]
-Homepage = "https://www.example.com/"
-Source = "https://github.com/oerd/django-scalar"
+Homepage = "https://github.com/netaddictionsrl/django-scalar"
+Source = "https://github.com/netaddictionsrl/django-scalar"
+Issues = "https://github.com/netaddictionsrl/django-scalar/issues"
+Changelog = "https://github.com/netaddictionsrl/django-scalar/blob/main/CHANGELOG.md"
 
 [dependency-groups]
 test = [
@@ -47,6 +64,9 @@ test = [
     "djangorestframework-stubs==3.15.2", # https://github.com/typeddjango/djangorestframework-stubs
     "pytest-django==4.11.1", # https://github.com/pytest-dev/pytest-django
     "beautifulsoup4==4.12.3", # https://www.crummy.com/software/BeautifulSoup/
+    "drf-spectacular >= 0.28.0",
+    "django-filter >= 24",
+    "djangorestframework >= 3.15.0",
 ]
 qa = [
     "pre-commit==4.1.0", # https://github.com/pre-commit/pre-commit
@@ -68,6 +88,17 @@ all = [
 requires = ["hatchling >= 1.26.3"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/django_scalar",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE*",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/django_scalar"]
+
 [tool.pytest.ini_options]
 addopts = "--ds=tests.settings"
 python_files = [
@@ -76,13 +107,37 @@ python_files = [
     "*_tests.py",
 ]
 
-include = ["tests/**"]
-omit = ["*/tests/*, */static/*"]
+[tool.coverage.run]
+include = ["src/django_scalar/**"]
+omit = ["*/tests/*", "*/static/*"]
 plugins = ["django_coverage_plugin"]
+
+# ==== ruff ====
+[tool.ruff]
+line-length = 119
+target-version = "py310"
+extend-exclude = ["uv.lock", "src/django_scalar/templates/**"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "DJ",  # flake8-django
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*" = ["B", "DJ"]
 
 # ==== mypy ====
 [tool.mypy]
-python_versions = ["3.10", "3.11", "3.12", "3.13"]
+python_version = "3.10"
 check_untyped_defs = true
 ignore_missing_imports = true
 warn_unused_ignores = true

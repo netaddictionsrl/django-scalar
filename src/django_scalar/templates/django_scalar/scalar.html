@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,18 +13,20 @@
       }
     </style>
     <link rel="stylesheet" href="{% static 'css/scalar.css' %}" />
+    {% if custom_css %}
+      <style>{{ custom_css|safe }}</style>
+    {% endif %}
   </head>
   <body>
-    <noscript>Scalar requires Javascript to function. Please enable it to browse the documentation.</noscript>
+    <noscript>
+      Scalar requires Javascript to function. Please enable it to browse the documentation.
+    </noscript>
     <script id="api-reference"
             data-url="{{ openapi_url }}"
             data-proxy-url="{{ scalar_proxy_url }}"></script>
-    {% if theme %}
+    {% if configuration_json %}
       <script>
-        var configuration = {
-          theme: '{{ theme }}',
-        };
-        document.getElementById('api-reference').dataset.configuration = JSON.stringify(configuration);
+        document.getElementById('api-reference').dataset.configuration = '{{ configuration_json|escapejs }}';
       </script>
     {% endif %}
     <script src="{{ scalar_js_url }}"></script>

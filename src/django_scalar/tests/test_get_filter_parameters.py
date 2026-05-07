@@ -4,12 +4,12 @@ Tests for the get_filter_parameters module.
 
 from django.db import models
 from django_filters import (
-    FilterSet,
-    CharFilter,
-    NumberFilter,
     BooleanFilter,
-    DateFilter,
+    CharFilter,
     ChoiceFilter,
+    DateFilter,
+    FilterSet,
+    NumberFilter,
 )
 from drf_spectacular.utils import OpenApiParameter
 
@@ -87,12 +87,8 @@ class TestGetFilterParameters:
         # Find parameters by name
         name_param = next(param for param in parameters if param.name == "name")
         age_param = next(param for param in parameters if param.name == "age")
-        is_active_param = next(
-            param for param in parameters if param.name == "is_active"
-        )
-        created_at_param = next(
-            param for param in parameters if param.name == "created_at"
-        )
+        is_active_param = next(param for param in parameters if param.name == "is_active")
+        created_at_param = next(param for param in parameters if param.name == "created_at")
 
         # Check types
         assert name_param.type is str

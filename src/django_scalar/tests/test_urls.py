@@ -2,22 +2,24 @@
 Tests for the URLs configuration.
 """
 
-from django.urls import reverse, resolve
+from django.urls import resolve, reverse
 
 from django_scalar.views import scalar_viewer
 
 
 class TestUrls:
-    """Tests for the URLs configuration."""
-
     def test_scalar_viewer_url_resolves(self):
-        """Test that the scalar_viewer URL resolves to the scalar_viewer view."""
         url = reverse("django_scalar:docs")
         assert resolve(url).func == scalar_viewer
 
     def test_scalar_viewer_url_name(self):
-        """Test that the scalar_viewer URL name is correct."""
         from tests.urls import PREFIX
 
         url = reverse("django_scalar:docs")
         assert url == f"/{PREFIX}/api/docs/"
+
+    def test_schema_url_registered_when_spectacular_installed(self):
+        # drf-spectacular is in the test dependency group, so the schema URL
+        # should be registered alongside the docs URL.
+        url = reverse("django_scalar:schema")
+        assert url.endswith("/api/schema/")

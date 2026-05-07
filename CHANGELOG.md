@@ -5,10 +5,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.0] - 2026-05-07
 
-- Add a class-based view that derives from `SpectacularApiView`
-- Make `drf-spectacular` an optional dependency
+Forked and maintained by [Netaddiction](https://github.com/netaddictionsrl).
+
+### Added
+
+- New class-based view `ScalarView` plus `SpectacularScalarView`, a drop-in
+  replacement for `SpectacularSwaggerView`/`SpectacularRedocView` that
+  resolves the schema URL via `url_name` or `url`.
+- New `SCALAR_VERSION` setting that pins the bundled `@scalar/api-reference`
+  version on the default jsdelivr CDN. Useful for production (no surprise
+  bumps from `@latest`).
+- New configuration knobs surfaced from Scalar:
+  `SCALAR_LAYOUT`, `SCALAR_DARK_MODE`, `SCALAR_HIDE_MODELS`,
+  `SCALAR_HIDE_DOWNLOAD_BUTTON`, `SCALAR_SEARCH_HOTKEY`, `SCALAR_CUSTOM_CSS`.
+  All are also exposed as keyword arguments on `scalar_viewer` and as class
+  attributes on `ScalarView`.
+- Test matrix now exercises Django 4.2 / 5.0 / 5.1 / 5.2 across Python
+  3.10 – 3.13.
+
+### Changed
+
+- **`drf-spectacular` and `django-filter` are now optional dependencies.**
+  The package itself only depends on Django. Install one of the new extras
+  for the optional integrations:
+  - `pip install "django-scalar[spectacular]"` for `SpectacularScalarView`
+    and the auto-registered `api/schema/` URL.
+  - `pip install "django-scalar[filters]"` for the `get_filter_parameters`
+    helper.
+  - `pip install "django-scalar[all]"` to get everything.
+- Default `SCALAR_JS_URL` is now derived from `SCALAR_VERSION`
+  (`https://cdn.jsdelivr.net/npm/@scalar/api-reference@latest` by default).
+  An explicit `SCALAR_JS_URL` still wins.
+- `urls.py` no longer hard-imports `drf_spectacular`. The schema URL is only
+  registered when the optional extra is installed.
+- The Scalar configuration object is now built server-side and serialized
+  into the page as a single JSON blob, instead of constructed inline in the
+  template.
+- Project metadata updated: homepage, source and issues now point at the
+  Netaddiction fork.
+
+### Fixed
+
+- `get_filter_parameters` previously overwrote the `ModelChoiceFilter`
+  description with a generic one because the description-by-lookup branch
+  ran unconditionally. The ModelChoiceFilter description is now preserved.
 
 ## [0.2.0] - 2025-05-02
 
