@@ -32,6 +32,7 @@ def get_filter_parameters(filter_class: type[Any]) -> list[Any]:
             installed. Install the ``filters`` extra to use this helper.
     """
     try:
+        from django.db.models import IntegerField
         from django_filters.filters import (
             BooleanFilter,
             ChoiceFilter,
@@ -61,11 +62,25 @@ def get_filter_parameters(filter_class: type[Any]) -> list[Any]:
             parameter_type = bool
         elif isinstance(filter_instance, DateFilter):
             parameter_type = str
+        # ModelChoiceFilter is a ChoiceFilter without "choices": it goes first
+        elif isinstance(filter_instance, ModelChoiceFilter):
+            # The value is the related object's to_field_name, or its primary key
+            queryset = filter_instance.field.queryset
+            related_model = queryset.model
+            to_field_name = filter_instance.field.to_field_name
+            if not to_field_name or to_field_name == "pk":
+                key_field = related_model._meta.pk
+            elif to_field_name in queryset.query.annotations:
+                key_field = queryset.query.annotations[to_field_name].output_field
+            else:
+                key_field = related_model._meta.get_field(to_field_name)
+            # A key that is a relation (the parent link of an inherited model) has the type of the key it points to
+            while hasattr(key_field, "target_field"):
+                key_field = key_field.target_field
+            parameter_type = int if isinstance(key_field, IntegerField) else str
         elif isinstance(filter_instance, ChoiceFilter):
             parameter_type = str
             enum = [choice[0] for choice in filter_instance.extra["choices"]]
-        elif isinstance(filter_instance, ModelChoiceFilter):
-            parameter_type = int
 
         # Get lookup expression for description
         lookup_expr = getattr(filter_instance, "lookup_expr", "exact")

@@ -146,9 +146,9 @@ class ScalarView(View):
     scalar_proxy_url: str | None = None
     scalar_favicon_url: str | None = None
 
-    http_method_names = ["get", "head", "options"]
+    http_method_names = ["get", "head", "options"]  # noqa: RUF012 - a list, as in View
 
-    def get(self, request, *args, **kwargs):  # noqa: D401 - Django view signature
+    def get(self, request, *args, **kwargs):
         return scalar_viewer(
             request,
             openapi_url=self.openapi_url,
@@ -207,7 +207,7 @@ class SpectacularScalarView(ScalarView):
         # subclass definition time rather than during a request.
         _import_spectacular_view()
 
-    def get(self, request, *args, **kwargs):  # noqa: D401 - Django view signature
+    def get(self, request, *args, **kwargs):
         # Resolve the schema URL the same way drf-spectacular does.
         if self.url_name is not None or self.url is not None:
             # Imported lazily so drf-spectacular stays an optional dependency.

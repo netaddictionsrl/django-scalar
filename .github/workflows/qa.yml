@@ -5,56 +5,32 @@ permissions:
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   lint:
-    name: "Lint (pre-commit + ruff)"
+    name: Lint (ruff)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          version: "0.6.17"
-          python-version: "3.13"
-          activate-environment: true
-      - name: Install dependencies
-        run: uv sync --group test --group qa
-      - name: Run ruff
-        run: uv run --frozen ruff check src
-      - name: Run pre-commit
-        run: |
-          uv run --frozen pre-commit install
-          uv run --frozen pre-commit run --all-files
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+      - run: uv run --locked ruff check
+      - run: uv run --locked ruff format --check
 
   test:
-    name: "Tests (Py ${{ matrix.python-version }} / Django ${{ matrix.django-version }})"
+    name: Tests (Py ${{ matrix.python-version }} / Django ${{ matrix.django-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
-        django-version: ["4.2", "5.0", "5.1", "5.2"]
-        exclude:
-          # Django 5.0+ requires Python >=3.10; explicit drops if/when needed.
-          - python-version: "3.10"
-            django-version: "5.2"  # 5.2 supports 3.10 but skip a slot to keep matrix lean
+        python-version: ["3.12", "3.13", "3.14"]
+        django-version: ["5.2", "6.0", "6.1"]
     steps:
-      - uses: actions/checkout@v4
-      - name: Install uv (py-${{ matrix.python-version }})
-        uses: astral-sh/setup-uv@v6
-        with:
-          version: "0.6.17"
-          python-version: ${{ matrix.python-version }}
-          activate-environment: true
-      - name: Install dependencies
-        run: uv sync --group test
-      - name: Pin Django ${{ matrix.django-version }}
-        run: uv pip install "Django~=${{ matrix.django-version }}.0"
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
       - name: Run tests
-        run: uv run --no-sync pytest
+        run: >
+          uv run --isolated --python ${{ matrix.python-version }} --with "django~=${{ matrix.django-version }}.0"
+          python -Wd -m django test --settings=tests.settings

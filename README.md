@@ -20,18 +20,20 @@ of the original [oerd/django-scalar](https://github.com/oerd/django-scalar).
 
 ## Installation
 
+Requires Python 3.12+ and Django 5.2+.
+
 Install only the Scalar viewer (Django-only):
 
 ```bash
-pip install "django-scalar @ git+https://github.com/netaddictionsrl/django-scalar@v0.3.0"
+pip install "django-scalar @ git+https://github.com/netaddictionsrl/django-scalar@v0.4.0"
 # or with uv
-uv add "django-scalar @ git+https://github.com/netaddictionsrl/django-scalar@v0.3.0"
+uv add "django-scalar @ git+https://github.com/netaddictionsrl/django-scalar@v0.4.0"
 ```
 
 If you want the drf-spectacular integration:
 
 ```bash
-pip install "django-scalar[spectacular] @ git+https://github.com/netaddictionsrl/django-scalar@v0.3.0"
+pip install "django-scalar[spectacular] @ git+https://github.com/netaddictionsrl/django-scalar@v0.4.0"
 ```
 
 Add `django_scalar` to `INSTALLED_APPS`:
@@ -107,6 +109,9 @@ None are required — sensible defaults are provided.
 | `SCALAR_PROXY_URL` | `""` | Optional Scalar CORS proxy. |
 | `SCALAR_FAVICON_URL` | `"/static/favicon.ico"` |  |
 
+The system checks report a `SCALAR_LAYOUT` that is not a Scalar layout (`django_scalar.E001`) and a
+`SCALAR_SEARCH_HOTKEY` that is not a single character (`django_scalar.E002`).
+
 ## Multiple instances
 
 Pass keyword arguments to `scalar_viewer` (FBV) or set class attributes on
@@ -145,18 +150,19 @@ pip install "django-scalar[filters]"
 from drf_spectacular.utils import extend_schema
 from django_scalar.get_filter_parameters import get_filter_parameters
 
+
 @extend_schema(parameters=get_filter_parameters(MyFilterSet))
-class MyView(ListAPIView):
-    ...
+class MyView(ListAPIView): ...
 ```
 
 ## Development
 
 ```bash
-uv sync --group test --group qa
-uv run pytest
-uv run ruff check src
+uv run python -m django test --settings=tests.settings
+uv run ruff check && uv run ruff format --check
 ```
+
+Another Django version: `uv run --isolated --with "django~=5.2.0" python -m django test --settings=tests.settings`.
 
 ## Contributing
 

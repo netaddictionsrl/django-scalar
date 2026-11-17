@@ -7,5 +7,4 @@ class ScalarConfig(AppConfig):
     verbose_name = _("Django Scalar")
 
     def ready(self):
-        # load/register something important, like signals
-        pass
+        from . import checks  # noqa: F401 - registers the system checks
