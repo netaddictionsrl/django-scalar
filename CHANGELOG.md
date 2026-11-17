@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-11-17
+
+### Added
+
+- System checks for the settings Scalar ignores silently when wrong:
+  `django_scalar.E001` (`SCALAR_LAYOUT` is neither `modern` nor `classic`) and
+  `django_scalar.E002` (`SCALAR_SEARCH_HOTKEY` is not a single character).
+
+### Changed
+
+- **Breaking:** requires Python 3.12+ and Django 5.2+ (tested on Django 5.2,
+  6.0 and 6.1, Python 3.12 – 3.14). Django 4.2, 5.0 and 5.1 and Python 3.10
+  and 3.11 are no longer supported.
+- Packaging moved from hatchling to `uv_build`; the tests live in `tests/`,
+  outside the package, and run with Django's test runner. The wheel no longer
+  ships them.
+- Development tooling reduced to ruff: pytest, mypy, pre-commit, djLint and
+  coverage are gone, and with them every vulnerable package in `uv.lock`.
+- The PyPI publish workflow is removed: this fork is installed from git.
+
+### Fixed
+
+- `get_filter_parameters` raised `KeyError: 'choices'` on a `FilterSet` with a
+  `ModelChoiceFilter`.
+
 ## [0.3.0] - 2026-05-07
 
 Forked and maintained by [Netaddiction](https://github.com/netaddictionsrl).

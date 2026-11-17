@@ -61,11 +61,12 @@ def get_filter_parameters(filter_class: type[Any]) -> list[Any]:
             parameter_type = bool
         elif isinstance(filter_instance, DateFilter):
             parameter_type = str
+        # ModelChoiceFilter is a ChoiceFilter without "choices": it goes first
+        elif isinstance(filter_instance, ModelChoiceFilter):
+            parameter_type = int
         elif isinstance(filter_instance, ChoiceFilter):
             parameter_type = str
             enum = [choice[0] for choice in filter_instance.extra["choices"]]
-        elif isinstance(filter_instance, ModelChoiceFilter):
-            parameter_type = int
 
         # Get lookup expression for description
         lookup_expr = getattr(filter_instance, "lookup_expr", "exact")
