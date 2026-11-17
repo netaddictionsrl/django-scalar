@@ -7,10 +7,10 @@ LAYOUTS = ("modern", "classic")
 
 @register()
 def check_settings(app_configs, **kwargs):
-    """The settings Scalar would silently ignore when wrong hold a value it accepts."""
+    """SCALAR_LAYOUT and SCALAR_SEARCH_HOTKEY hold values Scalar accepts. Empty values count as unset, as in the view."""
     errors = []
     layout = app_settings.LAYOUT
-    if layout is not None and layout not in LAYOUTS:
+    if layout and layout not in LAYOUTS:
         errors.append(
             Error(
                 f"SCALAR_LAYOUT = {layout!r} is not a Scalar layout.",
@@ -19,7 +19,7 @@ def check_settings(app_configs, **kwargs):
             )
         )
     hotkey = app_settings.SEARCH_HOTKEY
-    if hotkey is not None and not (isinstance(hotkey, str) and len(hotkey) == 1):
+    if hotkey and not (isinstance(hotkey, str) and len(hotkey) == 1):
         errors.append(
             Error(
                 f"SCALAR_SEARCH_HOTKEY = {hotkey!r} is not a single character.",

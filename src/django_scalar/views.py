@@ -146,7 +146,7 @@ class ScalarView(View):
     scalar_proxy_url: str | None = None
     scalar_favicon_url: str | None = None
 
-    http_method_names = ("get", "head", "options")
+    http_method_names = ["get", "head", "options"]  # noqa: RUF012 - a list, as in View
 
     def get(self, request, *args, **kwargs):
         return scalar_viewer(

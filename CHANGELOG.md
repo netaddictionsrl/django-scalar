@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- System checks for the settings Scalar ignores silently when wrong:
+- System checks for two settings:
   `django_scalar.E001` (`SCALAR_LAYOUT` is neither `modern` nor `classic`) and
   `django_scalar.E002` (`SCALAR_SEARCH_HOTKEY` is not a single character).
 

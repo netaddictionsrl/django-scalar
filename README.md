@@ -110,7 +110,7 @@ None are required — sensible defaults are provided.
 | `SCALAR_FAVICON_URL` | `"/static/favicon.ico"` |  |
 
 The system checks report a `SCALAR_LAYOUT` that is not a Scalar layout (`django_scalar.E001`) and a
-`SCALAR_SEARCH_HOTKEY` that is not a single character (`django_scalar.E002`): Scalar would ignore both silently.
+`SCALAR_SEARCH_HOTKEY` that is not a single character (`django_scalar.E002`).
 
 ## Multiple instances
 

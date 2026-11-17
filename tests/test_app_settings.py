@@ -45,11 +45,15 @@ class ChecksTests(SimpleTestCase):
     def test_valid_settings_pass(self):
         self.assertEqual(check_settings(None), [])
 
+    @override_settings(SCALAR_LAYOUT="", SCALAR_SEARCH_HOTKEY="")
+    def test_empty_settings_count_as_unset(self):
+        self.assertEqual(check_settings(None), [])
+
     @override_settings(SCALAR_LAYOUT="fancy")
     def test_unknown_layout_is_an_error(self):
         self.assertEqual([e.id for e in check_settings(None)], ["django_scalar.E001"])
 
-    def test_hotkey_longer_than_a_character_is_an_error(self):
-        for value in ("ctrl+k", "", 7):
+    def test_hotkey_that_is_not_one_character_is_an_error(self):
+        for value in ("ctrl+k", 7):
             with self.subTest(value=value), override_settings(SCALAR_SEARCH_HOTKEY=value):
                 self.assertEqual([e.id for e in check_settings(None)], ["django_scalar.E002"])
