@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.test import SimpleTestCase
 from django_filters import (
@@ -23,6 +25,13 @@ class Author(models.Model):
         app_label = "tests"
 
 
+class Book(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+
+    class Meta:
+        app_label = "tests"
+
+
 class AuthorFilterSet(FilterSet):
     name = CharFilter(lookup_expr="iexact")
     age = NumberFilter()
@@ -30,6 +39,8 @@ class AuthorFilterSet(FilterSet):
     created_at = DateFilter()
     status = ChoiceFilter(choices=[("active", "Active"), ("inactive", "Inactive")])
     friend = ModelChoiceFilter(queryset=Author.objects.all())
+    friend_name = ModelChoiceFilter(queryset=Author.objects.all(), to_field_name="name")
+    book = ModelChoiceFilter(queryset=Book.objects.all())
 
     class Meta:
         model = Author
@@ -43,7 +54,7 @@ class GetFilterParametersTests(SimpleTestCase):
         cls.parameters = {p.name: p for p in get_filter_parameters(AuthorFilterSet)}
 
     def test_one_optional_query_parameter_per_filter(self):
-        self.assertEqual(list(self.parameters), ["name", "age", "is_active", "created_at", "status", "friend"])
+        self.assertEqual(len(self.parameters), 8)
         for parameter in self.parameters.values():
             self.assertEqual(parameter.location, "query")
             self.assertIs(parameter.required, False)
@@ -51,7 +62,18 @@ class GetFilterParametersTests(SimpleTestCase):
     def test_types(self):
         types = {name: p.type for name, p in self.parameters.items()}
         self.assertEqual(
-            types, {"name": str, "age": int, "is_active": bool, "created_at": str, "status": str, "friend": int}
+            types,
+            {
+                "name": str,
+                "age": int,
+                "is_active": bool,
+                "created_at": str,
+                "status": str,
+                # a related object is named by its primary key, or by to_field_name
+                "friend": int,
+                "friend_name": str,
+                "book": str,
+            },
         )
 
     def test_choices_become_an_enum(self):

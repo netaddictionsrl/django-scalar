@@ -28,7 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - `get_filter_parameters` raised `KeyError: 'choices'` on a `FilterSet` with a
-  `ModelChoiceFilter`.
+  `ModelChoiceFilter`, whose parameter now takes the type of the related key
+  (`to_field_name` or the primary key): `int` for integer keys, `str` otherwise.
 
 ## [0.3.0] - 2026-05-07
 

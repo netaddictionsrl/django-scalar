@@ -32,6 +32,7 @@ def get_filter_parameters(filter_class: type[Any]) -> list[Any]:
             installed. Install the ``filters`` extra to use this helper.
     """
     try:
+        from django.db.models import IntegerField
         from django_filters.filters import (
             BooleanFilter,
             ChoiceFilter,
@@ -63,7 +64,13 @@ def get_filter_parameters(filter_class: type[Any]) -> list[Any]:
             parameter_type = str
         # ModelChoiceFilter is a ChoiceFilter without "choices": it goes first
         elif isinstance(filter_instance, ModelChoiceFilter):
-            parameter_type = int
+            # The value is the related object's to_field_name, or its primary key
+            related_model = filter_instance.field.queryset.model
+            key_field = related_model._meta.get_field(
+                filter_instance.field.to_field_name or related_model._meta.pk.name
+            )
+            key_field = getattr(key_field, "target_field", key_field)
+            parameter_type = int if isinstance(key_field, IntegerField) else str
         elif isinstance(filter_instance, ChoiceFilter):
             parameter_type = str
             enum = [choice[0] for choice in filter_instance.extra["choices"]]
