@@ -1,0 +1,22 @@
+CHANGELOG.md
+  h_039db4f6b6d8a6 12
+README.md
+  h_039db4f6b6d8a6 113
+src/django_scalar/checks.py
+  h_039db4f6b6d8a6 10,13,22
+src/django_scalar/views.py
+  h_039db4f6b6d8a6 149
+tests/test_app_settings.py
+  h_039db4f6b6d8a6 48-51,56-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a86d02f9577ea85eb5a148b89177a49b33e9ed8d",
+  "prompts": {},
+  "humans": {
+    "h_039db4f6b6d8a6": {
+      "author": "Matteo Serafini <matteo.serafini@netaddiction.it>"
+    }
+  }
+}
