@@ -66,10 +66,14 @@ def get_filter_parameters(filter_class: type[Any]) -> list[Any]:
         elif isinstance(filter_instance, ModelChoiceFilter):
             # The value is the related object's to_field_name, or its primary key
             related_model = filter_instance.field.queryset.model
-            key_field = related_model._meta.get_field(
-                filter_instance.field.to_field_name or related_model._meta.pk.name
-            )
-            key_field = getattr(key_field, "target_field", key_field)
+            to_field_name = filter_instance.field.to_field_name
+            if to_field_name in (None, "pk"):
+                key_field = related_model._meta.pk
+            else:
+                key_field = related_model._meta.get_field(to_field_name)
+            # A key that is a relation (the parent link of an inherited model) has the type of the key it points to
+            while hasattr(key_field, "target_field"):
+                key_field = key_field.target_field
             parameter_type = int if isinstance(key_field, IntegerField) else str
         elif isinstance(filter_instance, ChoiceFilter):
             parameter_type = str

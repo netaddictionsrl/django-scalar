@@ -32,6 +32,16 @@ class Book(models.Model):
         app_label = "tests"
 
 
+class Editor(Author):
+    class Meta:
+        app_label = "tests"
+
+
+class ChiefEditor(Editor):
+    class Meta:
+        app_label = "tests"
+
+
 class AuthorFilterSet(FilterSet):
     name = CharFilter(lookup_expr="iexact")
     age = NumberFilter()
@@ -40,6 +50,8 @@ class AuthorFilterSet(FilterSet):
     status = ChoiceFilter(choices=[("active", "Active"), ("inactive", "Inactive")])
     friend = ModelChoiceFilter(queryset=Author.objects.all())
     friend_name = ModelChoiceFilter(queryset=Author.objects.all(), to_field_name="name")
+    friend_pk = ModelChoiceFilter(queryset=Author.objects.all(), to_field_name="pk")
+    chief = ModelChoiceFilter(queryset=ChiefEditor.objects.all())
     book = ModelChoiceFilter(queryset=Book.objects.all())
 
     class Meta:
@@ -54,7 +66,7 @@ class GetFilterParametersTests(SimpleTestCase):
         cls.parameters = {p.name: p for p in get_filter_parameters(AuthorFilterSet)}
 
     def test_one_optional_query_parameter_per_filter(self):
-        self.assertEqual(len(self.parameters), 8)
+        self.assertEqual(len(self.parameters), 10)
         for parameter in self.parameters.values():
             self.assertEqual(parameter.location, "query")
             self.assertIs(parameter.required, False)
@@ -72,6 +84,9 @@ class GetFilterParametersTests(SimpleTestCase):
                 # a related object is named by its primary key, or by to_field_name
                 "friend": int,
                 "friend_name": str,
+                "friend_pk": int,
+                # the key of an inherited model is the key of its root
+                "chief": int,
                 "book": str,
             },
         )
