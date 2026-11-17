@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.db.models.functions import Lower
 from django.test import SimpleTestCase
 from django_filters import (
     BooleanFilter,
@@ -51,6 +52,7 @@ class AuthorFilterSet(FilterSet):
     friend = ModelChoiceFilter(queryset=Author.objects.all())
     friend_name = ModelChoiceFilter(queryset=Author.objects.all(), to_field_name="name")
     friend_pk = ModelChoiceFilter(queryset=Author.objects.all(), to_field_name="pk")
+    friend_slug = ModelChoiceFilter(queryset=Author.objects.annotate(slug=Lower("name")), to_field_name="slug")
     chief = ModelChoiceFilter(queryset=ChiefEditor.objects.all())
     book = ModelChoiceFilter(queryset=Book.objects.all())
 
@@ -66,7 +68,7 @@ class GetFilterParametersTests(SimpleTestCase):
         cls.parameters = {p.name: p for p in get_filter_parameters(AuthorFilterSet)}
 
     def test_one_optional_query_parameter_per_filter(self):
-        self.assertEqual(len(self.parameters), 10)
+        self.assertEqual(len(self.parameters), 11)
         for parameter in self.parameters.values():
             self.assertEqual(parameter.location, "query")
             self.assertIs(parameter.required, False)
@@ -85,6 +87,7 @@ class GetFilterParametersTests(SimpleTestCase):
                 "friend": int,
                 "friend_name": str,
                 "friend_pk": int,
+                "friend_slug": str,
                 # the key of an inherited model is the key of its root
                 "chief": int,
                 "book": str,
