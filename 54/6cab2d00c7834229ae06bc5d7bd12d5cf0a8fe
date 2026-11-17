@@ -1,0 +1,16 @@
+src/django_scalar/get_filter_parameters.py
+  h_039db4f6b6d8a6 69-76
+tests/test_get_filter_parameters.py
+  h_039db4f6b6d8a6 35-44,53-54,69,87-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "546cab2d00c7834229ae06bc5d7bd12d5cf0a8fe",
+  "prompts": {},
+  "humans": {
+    "h_039db4f6b6d8a6": {
+      "author": "Matteo Serafini <matteo.serafini@netaddiction.it>"
+    }
+  }
+}
