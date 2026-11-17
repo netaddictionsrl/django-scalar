@@ -1,0 +1,18 @@
+CHANGELOG.md
+  h_039db4f6b6d8a6 31-32
+src/django_scalar/get_filter_parameters.py
+  h_039db4f6b6d8a6 35,67-73
+tests/test_get_filter_parameters.py
+  h_039db4f6b6d8a6 1-2,28-34,42-43,57,65-76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e64f8df7971c88795684c9e7201f5ec7ed279169",
+  "prompts": {},
+  "humans": {
+    "h_039db4f6b6d8a6": {
+      "author": "Matteo Serafini <matteo.serafini@netaddiction.it>"
+    }
+  }
+}
