@@ -1,0 +1,50 @@
+.github/workflows/codeql.yml
+  h_039db4f6b6d8a6 1,5,7,9-12,17,20,24,26-33
+.github/workflows/qa.yml
+  h_039db4f6b6d8a6 8,10,14,17-20,23,28-29,31-32,34-36
+.python-version
+  h_039db4f6b6d8a6 1
+CHANGELOG.md
+  h_039db4f6b6d8a6 8-32
+README.md
+  h_039db4f6b6d8a6 23-24,28,30,36,112-114,153,155,161-162,165-166
+docs/README.md
+  h_039db4f6b6d8a6 8-61
+pyproject.toml
+  h_039db4f6b6d8a6 3,6-8,13-14,18,21,24-26,35-36,39-40,43-44,47
+src/django_scalar/apps.py
+  h_039db4f6b6d8a6 10
+src/django_scalar/checks.py
+  h_039db4f6b6d8a6 1,3,5,8-30
+src/django_scalar/get_filter_parameters.py
+  h_039db4f6b6d8a6 64-66
+src/django_scalar/views.py
+  h_039db4f6b6d8a6 149,151,210
+tests/settings.py
+  h_039db4f6b6d8a6 1-2,11,14-17
+tests/test_app_settings.py
+  h_039db4f6b6d8a6 1,3,5-21,24-25,27-29,31-33,35-37,40-42,44-46,48-50,52-55
+tests/test_get_filter_parameters.py
+  h_039db4f6b6d8a6 2,9,16,23,26,31-32,35-63
+tests/test_spectacular_view.py
+  h_039db4f6b6d8a6 1,5-9,11-13,15-17
+tests/test_urls.py
+  h_039db4f6b6d8a6 1,7-8,10-11,13-14
+tests/test_views.py
+  h_039db4f6b6d8a6 3,9-23,25,27,41-83
+tests/urls.py
+  h_039db4f6b6d8a6 7,9
+uv.lock
+  h_039db4f6b6d8a6 2-3,7,9,11,16,18,20,25,32,34,39,44,46,51,74,83,96,100,105,110,112,117,127,129,143,151,153,158,163,165,170-211,216,223,225,230-333,338-358,363,365,367,372,374,376,381,383,385,390,392,394
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bce6bfcad99054449f5120a4c575c5626f883475",
+  "prompts": {},
+  "humans": {
+    "h_039db4f6b6d8a6": {
+      "author": "Matteo Serafini <matteo.serafini@netaddiction.it>"
+    }
+  }
+}
