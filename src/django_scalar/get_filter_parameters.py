@@ -67,7 +67,7 @@ def get_filter_parameters(filter_class: type[Any]) -> list[Any]:
             # The value is the related object's to_field_name, or its primary key
             related_model = filter_instance.field.queryset.model
             to_field_name = filter_instance.field.to_field_name
-            if to_field_name in (None, "pk"):
+            if not to_field_name or to_field_name == "pk":
                 key_field = related_model._meta.pk
             else:
                 key_field = related_model._meta.get_field(to_field_name)
